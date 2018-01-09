@@ -30,14 +30,12 @@
 #include <stdlib.h>
 #define _REALLY_INCLUDE_SYS__SYSTEM_PROPERTIES_H_
 #include <sys/_system_properties.h>
-#include <android-base/logging.h>
+
 #include <android-base/properties.h>
 #include "property_service.h"
+#include "vendor_init.h"
 
-
-
-namespace android {
-namespace init {
+using android::init::property_set;
 
 void property_override(char const prop[], char const value[])
 {
@@ -71,7 +69,6 @@ void vendor_load_properties()
         return;
 
     std::string sku = android::base::GetProperty("ro.boot.hardware.sku", "");
-    property_set("ro.product.model", sku.c_str());
 
     // rmt_storage
     std::string device = android::base::GetProperty("ro.boot.device", "");
@@ -79,6 +76,7 @@ void vendor_load_properties()
     property_set("ro.hw.device", device.c_str());
     property_set("ro.hw.radio", radio.c_str());
     property_set("ro.hw.fps", "true");
+    property_set("ro.hw.imager", "12MP");
 
     num_sims();
 
@@ -95,5 +93,3 @@ void vendor_load_properties()
         property_set("ro.hw.dtv", "true");
     }
 }
-}  // namespace init
-} // namespace android
